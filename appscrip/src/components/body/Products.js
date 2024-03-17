@@ -14,6 +14,7 @@ function Products() {
     const [leftArrow, setLeftArrow] = useState(leftArrowLogo);
     const [dropdownCategories, setDropdownCategories] = useState({});
     const [hideFilters, setHideFilters] = useState(false);
+    const [loading , setLoading] = useState(false);
     let filterSection = useRef(null);
 
     let toggleFilter = () => {
@@ -37,9 +38,11 @@ function Products() {
     const getProducts = async () => {
         let URL = 'https://fakestoreapi.com/products'
         try {
+            setLoading(true)
             const response = await fetch(URL);
             const data = await response.json();
             setProducts(data)
+            setLoading(false)
         }
         catch (error) {
             alert('Internal server Errror', error)
@@ -54,9 +57,7 @@ function Products() {
             setHideFilters(false)
         }
     }
-    useEffect(()=>{
-
-    },[])
+    
     useEffect(() => {
         getProducts();
         window.addEventListener('resize', handleResize);
@@ -67,6 +68,14 @@ function Products() {
     useEffect(() => {
         handleResize();
     }, [])
+
+    if(loading){
+        return (
+            <div>
+               <center> <p> Loading.... </p></center>
+            </div>
+        )
+    }
 
     return (
         <>
